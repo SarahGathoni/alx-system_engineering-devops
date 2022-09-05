@@ -1,0 +1,2 @@
+#!/bin/bash
+headt -n 10 /etc/passwd
