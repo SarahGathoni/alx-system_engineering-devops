@@ -1,1 +1,1 @@
-Write a script that duplicates the last line of the file iacta
+script that displays a confused smiley "(Ôo)
