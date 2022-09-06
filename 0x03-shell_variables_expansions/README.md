@@ -1,1 +1,1 @@
-global variable
+5-local-variables
