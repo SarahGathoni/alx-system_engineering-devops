@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Install HAProxy if not already installed
+if ! which haproxy > /dev/null; then
+  sudo apt-get update
+  sudo apt-get install -y haproxy
+fi
+
+# Backup the original HAProxy configuration file
+sudo cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.bak
+
+# Create a new HAProxy configuration file
+cat << EOF | sudo tee /etc/haproxy/haproxy.cfg > /dev/null
+# Frontend configuration
+frontend http-in
+  bind *:80
+  default_backend webservers
+
+# Backend configuration
+backend webservers
+  balance roundrobin
+  server web-01 192.168.0.2:80 check
+  server web-02 192.168.0.3:80 check
+EOF
+
+# Restart HAProxy service to apply the new configuration
+sudo systemctl restart haproxy
+
+# Enable management of HAProxy via an init script
+sudo sed -i 's/ENABLED=0/ENABLED=1/' /etc/default/haproxy
+sudo systemctl enable haproxy
+
