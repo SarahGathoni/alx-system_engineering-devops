@@ -32,3 +32,8 @@ Adjust worker processes: Determine the appropriate number of worker processes ba
 Investigate backend server/application: Analyze the backend server logs and metrics to identify any issues that might have contributed to the request failures. Check for resource constraints, performance bottlenecks, and database connectivity problems. Collaborate with the backend team to address and resolve any identified issues.
 
 Strengthen logging and monitoring capabilities: Enhance the logging and monitoring infrastructure to capture detailed information about the web server's performance and errors. Enable logging of relevant Nginx modules and application logs. Set up alerts and notifications to proactively identify and address
+
+HUMOUR
+
+While our web server was feeling the pressure during the benchmarking challenge, it seems it handled it like a mathematician trying to divide by zero—total chaos! Our server had a bit of a meltdown, with failed requests popping up like mushrooms after a rainstorm. It turns out, our web stack was as stable as a Jenga tower during an earthquake.
+
