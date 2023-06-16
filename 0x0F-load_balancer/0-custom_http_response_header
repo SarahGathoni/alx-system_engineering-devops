@@ -6,22 +6,33 @@
 # Configures /redirect_me as a "301 Moved Permanently".
 # Includes a custom 404 page containing "Ceci n'est pas une page".
 
-sudo apt-get update
-sudo apt-get install -y nginx
+# Install Nginx
+sudo apt update
+sudo apt install -y nginx
 
-# Configure custom HTTP response header
-sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
+# Define the custom header name and value
+customHeaderName="X-Served-By"
+customHeaderValue="$hostname"
+
+# Create a new configuration file for the custom header
 sudo tee /etc/nginx/conf.d/custom-header.conf > /dev/null <<EOT
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
+
     server_name _;
-    add_header X-Served-By \$hostname;
-    root /var/www/html;
-    index index.html index.htm index.nginx-debian.html;
+location / {
+        add_header $customHeaderName $customHeaderValue;
+        root /var/www/html;
+        index index.html index.htm;
+    }
 }
 EOT
 
-# Restart Nginx service
-sudo systemctl restart nginx.service
+# Test the configuration
+sudo nginx -t
 
+# Reload Nginx to apply the changes
+sudo systemctl reload nginx
+
+echo "Custom Nginx response header has been configured."
