@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin
 # Installs Nginx with the following configurations:
 #+    Listens on port 80.
 #+    Returns a page containing "Hello World!" when queried
@@ -11,7 +11,7 @@ sudo apt-get install -y nginx
 
 # Configure custom HTTP response header
 sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
-sudo cat <<EOT > /etc/nginx/sites-available/default
+sudo tee /etc/nginx/conf.d/custom-header.conf > /dev/null <<EOT
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
