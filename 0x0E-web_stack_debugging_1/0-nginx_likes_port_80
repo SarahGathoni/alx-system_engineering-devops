@@ -1,47 +1,7 @@
-#!/bin/bash
-
-# Check if Nginx is installed
-if ! command -v nginx &> /dev/null
-then
-    echo "Nginx is not installed. Please install Nginx."
-    exit 1
-fi
-
-# Check if Nginx is running
-if ! systemctl is-active nginx &> /dev/null
-then
-    echo "Nginx is not running. Please start Nginx."
-    exit 1
-fi
-
-# Check if Nginx is listening on port 80
-if ! ss -ntl | grep -q ':80'
-then
-    echo "Nginx is not listening on port 80."
-    echo "Checking for possible conflicts..."
-
-    # Check if there are other processes listening on port 80
-    if ss -ntl | grep -q ':80'
-    then
-        echo "There is another process listening on port 80."
-    else
-        echo "No other process is listening on port 80. Checking Nginx configuration..."
-
-        # Check Nginx configuration for errors
-        nginx -t
-
-        # Check if the server block for port 80 is enabled
-        if grep -q 'listen\s*80' /etc/nginx/sites-enabled/*
-        then
-            echo "The server block for port 80 is enabled. Checking Nginx logs..."
-
-            # Check Nginx logs for errors
-            tail -n 20 /var/log/nginx/error.log
-        else
-            echo "The server block for port 80 is not enabled."
-        fi
-    fi
-else
-    echo "Nginx is listening on port 80."
-fi
-
+#!/usr/bin/env bash
+# debugging nginx port 80
+# How I solved it: delete the existing ../sites-enabled/default and replace it with a copy of
+# ../sites-available/default. You do that by creating a symbolic link. 
+# NB: The flag -s creates a symbolic link, -f deletes the existing file and replaces it
+sudo ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+sudo service nginx restart
